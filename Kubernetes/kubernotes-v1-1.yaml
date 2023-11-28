@@ -1,0 +1,136 @@
+# PostgresSQL Database)
+# --------------------
+# - One container per pod running the image portgres:latest
+# - Service (type: ClusterIP) to open up the app only to the cluster.
+#
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+spec:
+  selector:
+    app: postgres
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres-container
+        image: postgres:latest
+        env:
+          - name: POSTGRES_DB
+            value: CloudComputing
+          - name: POSTGRES_USER
+            value: postgres
+          - name: POSTGRES_PASSWORD
+            value: mdp123
+        ports:
+        - containerPort: 5432
+---
+# KTFront (Kubernotes Front-end) v1.1
+# --------------------
+# - Deployment to launch one container of c74yanis/ktfront in a pod.
+# - Service (type: LoadBalancer) to open up the app to the world (localhost, at least).
+# 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ktfront-service
+  labels:
+    app: ktfront
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+  selector:
+    app: ktfront
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubernotes
+  labels:
+    app: ktfront
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ktfront
+  template:
+    metadata:
+      labels:
+        app: ktfront
+    spec:
+      containers:
+      - name: kubernotes
+        image: c74yanis/ktfront:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+---
+# KTBack (Kubernotes Back-end) v1.1
+# --------------------
+# - Deployment to launch one container of c74yanis/ktfront in a pod.
+# - Service (type: ClusterIP) to open up the app only to the cluster.
+# 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ktback-service
+  labels:
+    app: ktback
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 3000
+    targetPort: 3000
+    protocol: TCP
+  selector:
+    app: ktback
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubernetes-api
+  labels:
+    app: ktback
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ktback
+  template:
+    metadata:
+      labels:
+        app: ktback
+    spec:
+      containers:
+      - name: kubernotes-api
+        image: c74yanis/ktback:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
