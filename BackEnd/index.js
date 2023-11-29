@@ -1,3 +1,4 @@
+// KuberTask: BackEnd v1.1
 const express = require('express')
 const { Pool } = require('pg');
 var cors = require('cors')
@@ -14,6 +15,7 @@ const pool = new Pool({
     port: 5432,
 });
 
+// Use JSON middleware
 app.use(express.json());
 app.use(cors()) 
 
@@ -47,14 +49,15 @@ END $$;
       await pool.query(query);
       console.log('Albums table created');
     } catch (err) {
+      // Putting a exeception to relaunch the script, because when you laucnh the Kubernetes File, the database is not ready yet
       console.error(err);
       console.error('Albums table creation failed, retrying in 5 seconds...');
       setTimeout(createAlbumsTable, 5000);
     }
 }
 
-// Starting
- createAlbumsTable();
+// Starting the initialization of the API
+createAlbumsTable();
 
 
 
@@ -167,5 +170,5 @@ app.delete('/tasks/:task_id', async (req, res) => {
 
 // Start the API server
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`App starting on ${port} :D`)
 })

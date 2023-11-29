@@ -8,6 +8,9 @@ import { RouterLink, RouterView } from 'vue-router'
   </header>
 
   <RouterView />
+  <footer>
+    <p>© 2023 - Yanis Bellahcene</p>
+  </footer>
 </template>
 
 <style scoped>
@@ -17,4 +20,14 @@ header {
   padding: 10px;
 }
 
+footer {
+  position: fixed;
+  bottom: 0;
+  text-align: center;
+  background-color: black;
+  color: greenyellow;
+  padding: 10px;
+  border-radius: 0 20px 0 0 ;
+  font-size: 1.5em;
+}
 </style>

@@ -1,6 +1,7 @@
 <script>
 import axios from 'axios';
 
+
 export default {
   data() {
     return {
@@ -20,6 +21,13 @@ export default {
     }
   },
   methods: {
+    movePanel() {
+      var panel = document.getElementById("formTask");
+      var button = document.getElementById("addButton");
+      panel.classList.toggle("clickedPanel");
+      button.classList.toggle("buttonRotate");
+    },
+
     addTask() {
       if (this.newTask.task_title === '' || this.newTask.task_description === '') {
         alert('Please, fill all the fields');
@@ -150,17 +158,19 @@ export default {
     </div>
   </div>
 
-  <div id="addButton">
-    +
+
+  <div id="addButton" @click="movePanel()">
+  +
   </div>
   <div id="formTask">
     <h3>Name of the task :</h3>
     <input v-model="newTask.task_title" />
     <h3>Description of the task :</h3>
-    <input v-model="newTask.task_description" />
+    <textarea cols="40" rows="5" style="resize: none;" v-model="newTask.task_description"></textarea>
     <br>
     <button @click="addTask()">Add</button>
   </div>
+  
 </template>
 
 <style scoped>
@@ -186,8 +196,35 @@ h3 {
   border-radius: 10px;
   padding: 7px;
   bottom: 100px;
-  right: 20px;
+  right: -400px;
   color: black;
+  transition: right 0.7s ease-in-out;
+}
+
+#formTask > button {
+  background-color: whitesmoke;
+  font-weight: bold;
+  border-radius: 10px;
+  padding: 7px;
+  width: 20%;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+ 
+#formTask > button:hover {
+  background-color: grey;
+  color: aquamarine;
+}
+
+#formTask > button:active {
+  background-color: black;
+  transform: scale(0.9);
+}
+
+.clickedPanel {
+  right: 20px !important;
 }
 
 #formTask h3 {
@@ -209,7 +246,21 @@ h3 {
   justify-content: center;
   align-items: center;
   font-weight: bold;
+  cursor: pointer;
+  transition: all 0.7s ease-in-out;
 }
+
+.buttonRotate {
+  transform: rotate(225deg);
+  background-color: black !important;
+  color: greenyellow !important;
+}
+
+
+#buttonControl:checked + #formTask {
+  right: 100px;
+}
+
 .material-symbols-outlined {
   font-size: 1.5rem;
   color: whitesmoke;
@@ -223,7 +274,6 @@ h3 {
   border-radius: 0 50px 50px 0;
   background-color: rgb(229, 128, 4);
 }
-
 
 .column {
   flex: 1;
