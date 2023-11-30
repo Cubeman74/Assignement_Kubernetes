@@ -1,3 +1,8 @@
+<!------------------------------------------------------------>
+<!------------- /> Kuber_ Tasks (Front v1.0) ----------------->
+<!------------- /> By: Yanis Bellahcene ---------------------->
+<!------------------------------------------------------------>
+
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 </script>
@@ -6,7 +11,6 @@ import { RouterLink, RouterView } from 'vue-router'
   <header>
     <h1>/> Kuber_ Tasks</h1>
   </header>
-
   <RouterView />
   <footer>
     <p>© 2023 - Yanis Bellahcene</p>
